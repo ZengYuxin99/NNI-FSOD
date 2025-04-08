@@ -4,7 +4,7 @@ import torch
 from dassl.utils import setup_logger, set_random_seed, collect_env_info
 from dassl.config import get_cfg_default
 from dassl.engine import build_trainer
-import trainers.NNI-FSOD
+import trainers.NNIFSOD
 import datasets.imagenet
 
 
@@ -64,12 +64,12 @@ def extend_cfg(cfg):
     """
     from yacs.config import CfgNode as CN
 
-    cfg.TRAINER.NNI-FSOD = CN()
-    cfg.TRAINER.NNI-FSOD.N_CTX = 16  # number of context vectors
-    cfg.TRAINER.NNI-FSOD.CSC = False  # class-specific context
-    cfg.TRAINER.NNI-FSOD.CTX_INIT = ""  # initialization words
-    cfg.TRAINER.NNI-FSOD.PREC = "fp16"  # fp16, fp32, amp
-    cfg.TRAINER.NNI-FSOD.CLASS_TOKEN_POSITION = "end"  # 'middle' or 'end' or 'front'
+    cfg.TRAINER.NNIFSOD = CN()
+    cfg.TRAINER.NNIFSOD.N_CTX = 16  # number of context vectors
+    cfg.TRAINER.NNIFSOD.CSC = False  # class-specific context
+    cfg.TRAINER.NNIFSOD.CTX_INIT = ""  # initialization words
+    cfg.TRAINER.NNIFSOD.PREC = "fp16"  # fp16, fp32, amp
+    cfg.TRAINER.NNIFSOD.CLASS_TOKEN_POSITION = "end"  # 'middle' or 'end' or 'front'
 
     cfg.DATASET.SUBSAMPLE_CLASSES = "all"  # all, base or new
 
@@ -166,7 +166,7 @@ if __name__ == "__main__":
         nargs=argparse.REMAINDER,
         help="modify config options using the command-line",
     )
-    # augment for NNI-FSOD
+    # augment for NNIFSOD
     parser.add_argument('--lambda_value', type=float, default=0.25,
                         help='weight for regulization loss')
     parser.add_argument('--topk', type=int, default=200,
