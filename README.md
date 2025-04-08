@@ -8,17 +8,15 @@
 在训练阶段, NNI-FSOD 将训练集中图片背景噪声“变废为宝”, 通过噪声发掘和噪声增强来提升模型的噪声鲁棒性与 OOD 检测性能. 在测试阶段, NNI-FSOD 通过多模态原型融合推
 理, 促进视觉特征空间和文本特征空间中的类别原型“优势互补”, 进一步提升模型的 ID 分类和 OOD 检测水平.
 
-
-
 ### 数据集、预训练模型
 本论文采用了和LoCoOp相同的实验数据集及预训练模型，请参考其代码库：[LoCoOp](https://github.com/AtsuMiyai/LoCoOp)
 
-### 1. 训练脚本
+### 训练脚本
 ```train
 CUDA_VISIBLE_DEVICES=0 bash scripts/NNI-FSOD/train.sh data imagenet vit_b16_ep50 end 16
 ```
 
-### 2. 推理脚本 
+### 推理脚本 
 ```eval
 CUDA_VISIBLE_DEVICES=0 bash scripts/NNI-FSOD/eval.sh data imagenet vit_b16_ep50 1 output/imagenet/LoCoOp/vit_b16_ep50_16shots/nctx16_cscFalse_ctpend/seed1
 ```
