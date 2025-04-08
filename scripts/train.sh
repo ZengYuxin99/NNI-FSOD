@@ -1,6 +1,6 @@
 #!/bin/bash
 # custom config
-TRAINER=NNI-FSOD
+TRAINER=NNIFSOD
 
 DATA=$1
 DATASET=$2
@@ -25,13 +25,13 @@ do
         --seed ${SEED} \
         --trainer ${TRAINER} \
         --dataset-config-file configs/datasets/${DATASET}.yaml \
-        --config-file configs/trainers/NNI-FSOD/${CFG}.yaml \
+        --config-file configs/trainers/NNIFSOD/${CFG}.yaml \
         --output-dir ${DIR} \
         --lambda_value ${lambda} \
         --topk ${topk} \
-        TRAINER.NNI-FSOD.N_CTX ${NCTX} \
-        TRAINER.NNI-FSOD.CSC ${CSC} \
-        TRAINER.NNI-FSOD.CLASS_TOKEN_POSITION ${CTP} \
+        TRAINER.NNIFSOD.N_CTX ${NCTX} \
+        TRAINER.NNIFSOD.CSC ${CSC} \
+        TRAINER.NNIFSOD.CLASS_TOKEN_POSITION ${CTP} \
         DATASET.NUM_SHOTS ${SHOTS}
     fi
 done
