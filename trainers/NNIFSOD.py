@@ -81,8 +81,8 @@ class PromptLearner(nn.Module):
     def __init__(self, cfg, classnames, clip_model):
         super().__init__()
         n_cls = len(classnames)
-        n_ctx = cfg.TRAINER.NNI-FSOD.N_CTX
-        ctx_init = cfg.TRAINER.NNI-FSOD.CTX_INIT
+        n_ctx = cfg.TRAINER.NNIFSOD.N_CTX
+        ctx_init = cfg.TRAINER.NNIFSOD.CTX_INIT
         dtype = clip_model.dtype
         ctx_dim = clip_model.ln_final.weight.shape[0]
         clip_imsize = clip_model.visual.input_resolution
@@ -101,7 +101,7 @@ class PromptLearner(nn.Module):
 
         else:
             # random initialization
-            if cfg.TRAINER.NNI-FSOD.CSC:
+            if cfg.TRAINER.NNIFSOD.CSC:
                 print("Initializing class-specific contexts")
                 ctx_vectors = torch.empty(n_cls, n_ctx, ctx_dim, dtype=dtype)
             else:
@@ -133,7 +133,7 @@ class PromptLearner(nn.Module):
         self.n_ctx = n_ctx
         self.tokenized_prompts = tokenized_prompts  # torch.Tensor
         self.name_lens = name_lens
-        self.class_token_position = cfg.TRAINER.NNI-FSOD.CLASS_TOKEN_POSITION
+        self.class_token_position = cfg.TRAINER.NNIFSOD.CLASS_TOKEN_POSITION
 
     def forward(self):
         ctx = self.ctx
@@ -232,12 +232,12 @@ class CustomCLIP(nn.Module):
 
 
 @TRAINER_REGISTRY.register()
-class NNI-FSOD(TrainerX):
-    """Local regularized Context Optimization (NNI-FSOD).
+class NNIFSOD(TrainerX):
+    """Local regularized Context Optimization (NNIFSOD).
     """
 
     def check_cfg(self, cfg):
-        assert cfg.TRAINER.NNI-FSOD.PREC in ["fp16", "fp32", "amp"]
+        assert cfg.TRAINER.NNIFSOD.PREC in ["fp16", "fp32", "amp"]
 
     def build_model(self):
         cfg = self.cfg
@@ -249,7 +249,7 @@ class NNI-FSOD(TrainerX):
         print(f"Loading CLIP (backbone: {cfg.MODEL.BACKBONE.NAME})")
         clip_model = load_clip_to_cpu(cfg)
 
-        if cfg.TRAINER.NNI-FSOD.PREC == "fp32" or cfg.TRAINER.NNI-FSOD.PREC == "amp":
+        if cfg.TRAINER.NNIFSOD.PREC == "fp32" or cfg.TRAINER.NNIFSOD.PREC == "amp":
             # CLIP's default precision is fp16
             clip_model.float()
 
@@ -270,7 +270,7 @@ class NNI-FSOD(TrainerX):
         self.sched = build_lr_scheduler(self.optim, cfg.OPTIM)
         self.register_model("prompt_learner", self.model.prompt_learner, self.optim, self.sched)
 
-        self.scaler = GradScaler() if cfg.TRAINER.NNI-FSOD.PREC == "amp" else None
+        self.scaler = GradScaler() if cfg.TRAINER.NNIFSOD.PREC == "amp" else None
 
         # Note that multi-gpu training could be slow because CLIP's size is
         # big, which slows down the copy operation in DataParallel
@@ -282,7 +282,7 @@ class NNI-FSOD(TrainerX):
     def forward_backward(self, batch):
         image, label = self.parse_batch_train(batch)
 
-        prec = self.cfg.TRAINER.NNI-FSOD.PREC
+        prec = self.cfg.TRAINER.NNIFSOD.PREC
 
         if prec == "amp":
             with autocast():
@@ -295,7 +295,7 @@ class NNI-FSOD(TrainerX):
                 output_local = output_local.view(batch_size * num_of_local_feature, -1)
                 loss_en = - entropy_select_topk(output_local, self.top_k, label, num_of_local_feature)
 
-                # calculate total loss for NNI-FSOD
+                # calculate total loss for NNIFSOD
                 loss = loss_id + self.lambda_value * loss_en
 
             self.optim.zero_grad()
@@ -313,7 +313,7 @@ class NNI-FSOD(TrainerX):
             output_local = output_local.view(batch_size * num_of_local_feature, -1)     
             loss_en = - entropy_select_topk(output_local, self.top_k, label, num_of_local_feature)
 
-            # calculate total loss for NNI-FSOD
+            # calculate total loss for NNIFSOD
             loss = loss_id + self.lambda_value * loss_en
 
             self.model_backward_and_update(loss)
