@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # custom config
-TRAINER=NNI-FSOD
+TRAINER=NNIFSOD
 
 CSC=False
 CTP=end
@@ -20,10 +20,10 @@ python eval_ood_detection.py \
 --root ${DATA} \
 --trainer ${TRAINER} \
 --dataset-config-file configs/datasets/${DATASET}.yaml \
---config-file configs/trainers/NNI-FSOD/${CFG}.yaml \
+--config-file configs/trainers/NNIFSOD/${CFG}.yaml \
 --output-dir ${Output_dir} \
 --model-dir ${MODEL_dir} \
 --load-epoch 50 \
 --T ${T} \
-TRAINER.NNI-FSOD.N_CTX ${NCTX} \
-TRAINER.NNI-FSOD.CSC ${CSC} \
+TRAINER.NNIFSOD.N_CTX ${NCTX} \
+TRAINER.NNIFSOD.CSC ${CSC} \
