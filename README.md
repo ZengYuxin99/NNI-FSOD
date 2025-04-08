@@ -22,3 +22,6 @@ CUDA_VISIBLE_DEVICES=0 bash scripts/NNI-FSOD/train.sh data imagenet vit_b16_ep50
 ```eval
 CUDA_VISIBLE_DEVICES=0 bash scripts/NNI-FSOD/eval.sh data imagenet vit_b16_ep50 1 output/imagenet/LoCoOp/vit_b16_ep50_16shots/nctx16_cscFalse_ctpend/seed1
 ```
+
+### 致谢
+本代码库充分借鉴了LoCoOp的开源代码库：[LoCoOp](https://github.com/AtsuMiyai/LoCoOp)。由衷感谢该论文各位作者！
