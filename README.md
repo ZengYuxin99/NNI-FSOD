@@ -15,12 +15,12 @@ We use the same datasets and pre-training models as LoCoOp, please refer to：[L
 
 ### Training
 ```train
-CUDA_VISIBLE_DEVICES=0 bash scripts/train.sh data imagenet vit_b16_ep50 end 16
+CUDA_VISIBLE_DEVICES=0 bash scripts/train.sh data imagenet vit_b16_ep50 
 ```
 
 ### Inference 
 ```eval
-CUDA_VISIBLE_DEVICES=0 bash scripts/eval.sh data imagenet vit_b16_ep50 1 output/imagenet/NNIFSOD/vit_b16_ep50_16shots/nctx16_cscFalse_ctpend/seed1
+CUDA_VISIBLE_DEVICES=0 bash scripts/eval.sh data imagenet vit_b16_ep50 
 ```
 
 ### Main results 
