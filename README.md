@@ -25,7 +25,7 @@ CUDA_VISIBLE_DEVICES=0 bash scripts/eval.sh data imagenet vit_b16_ep50
 
 ### Main results 
 ![Visualization_figure](figure/res1.png)
-同先进算法的对比（w/ CLIP-B/16）
+State-of-the-art Comparison（w/ CLIP-B/16）
 
 ### Acknowledgment
 This code base fully absorb the LoCoOp open source code library：[LoCoOp](https://github.com/AtsuMiyai/LoCoOp)。Heartfelt thanks to the authors of this paper!
