@@ -1,4 +1,4 @@
-# Near-boundary noise improved few-shot out-of-distribution detection 
+# Near-boundary Noise Improved Few-shot Out-of-distribution Detection 
 
 ### Abstract
 For machine learning models deployed in the open-world, the ability to detect out-of-distribution (OOD) data is crucial. Few-shot out-of-distribution detection (FSOD), which aims to quickly learn the ability to
