@@ -1,29 +1,31 @@
-# 基于临界噪声增强的小样本分布外检测
+# Near-boundary noise improved few-shot out-of-distribution detection 
 
-### 摘要
-对于部署在开放环境中的机器学习模型, 具备检测来自分布外 (Out-of-distribution, OOD) 数据的能力至关重要. 小样本分布外检测 (FSOD), 旨在从少量训练样本中快速学习辨识分布内 (In-distribution, ID) 样本和 OOD 数据的能力, 近年来受到了广泛关注. 先进的 FSOD 方法通过对预训练多模态大模型进行提示学习以快速挖掘判别性类别知识, 提升 OOD 检测水平. 尽管如此, 此类方法从“干净”训练样本中学得的模型在面对存在背景噪声的测试样本时鲁棒性较差, 容易将带有背景噪声的 ID 数据错误地识别为 OOD 数据, 反之亦然. 为了解决此问题, 本文提出一种基于临界噪声增强的小样本分布外检测方法 (NNI-FSOD). 在训练阶段, NNI-FSOD 借助多模态大模型强大的视觉-文本对齐能力, 将训练样本中的图片区域划分为干净区域和噪声区域, 并将噪声区域“变废为宝”用于紧致 ID 类别分布空间, 提升 OOD 检测水平. 在测试阶段, NNI-FSOD 促使视觉-文本类别原型知识“优势互补”, 以进一步提升 ID 分类和 OOD 检测性能. 在多个数据集上的实验结果证明了NNI-FSOD 的突出优势：平均而言, NNI-FSOD 将基线方法的 FPR95 提升了11.05%, AUROC 提升了2.24%, ID ACC 提升了1.87%, 最终超越先前最优方法取得最佳性能.
+### Abstract
+For machine learning models deployed in the open-world, the ability to detect out-of-distribution (OOD) data is crucial. Few-shot out-of-distribution detection (FSOD), which aims to quickly learn the ability to
+recognize in-distribution (ID) samples and OOD data from a small number of training samples, has received much attention in recent years. Advanced FSOD methods improve OOD detection by performing prompt learning on
+pre-trained multimodal models to quickly mine discriminative ID class knowledge. However, the models learned from “clean”training samples are less robust to test samples with background noise, and can easily misidentify ID data with background noise as OOD data, and vice versa. To tackle this problem, this paper proposes a Near-boundary Noise Improved Few-shot OOD Detection (NNI-FSOD) scheme. During training, NNI-FSOD
+utilizes the powerful visual-text alignment capability of multimodal models to divide the image regions in the training samples into clean regions and noisy regions, and the noisy regions are used to tighten the distribution space of ID samples, so as to improve the OOD detection performance. During inference, NNI-FSOD further improves the ID classification and OOD detection performance of the model by complementing the knowledge of visual-textual class prototypes. Experimental results on multiple datasets demonstrate the remarkabe advantages of NNI-FSOD: on average, NNI-FSOD improves the FPR95 of the baseline method by 11.05%, the AUROC by 2.24%, and the ID ACC by 1.87%. Ultimately, NNI-FSOD outperforms the previous optimal method and establishes new state-of-the-art results.
 
-### 方法
+### Mehotd
 ![Visualization_figure](figure/nni-fsod.png)
-在训练阶段, NNI-FSOD 将训练集中图片背景噪声“变废为宝”, 通过噪声发掘和噪声增强来提升模型的噪声鲁棒性与 OOD 检测性能. 在测试阶段, NNI-FSOD 通过多模态原型融合推
-理, 促进视觉特征空间和文本特征空间中的类别原型“优势互补”, 进一步提升模型的 ID 分类和 OOD 检测水平.
+During training, NNI-FSOD utilizes the powerful visual-text alignment capability of multimodal models to divide the image regions in the training samples into clean regions and noisy regions, and the noisy regions are used to tighten the distribution space of ID samples, so as to improve the OOD detection performance. During inference, NNI-FSOD further improves the ID classification and OOD detection performance of the model by complementing the knowledge of visual-textual class prototypes.
 
-### 数据集、预训练模型
-本论文采用了和LoCoOp相同的实验数据集及预训练模型，请参考其代码库：[LoCoOp](https://github.com/AtsuMiyai/LoCoOp)
+### Datasets, Pretrained models
+We use the same datasets and pre-training models as LoCoOp, please refer to：[LoCoOp](https://github.com/AtsuMiyai/LoCoOp)
 
-### 训练脚本
+### Training
 ```train
 CUDA_VISIBLE_DEVICES=0 bash scripts/train.sh data imagenet vit_b16_ep50 end 16
 ```
 
-### 推理脚本 
+### Inference 
 ```eval
 CUDA_VISIBLE_DEVICES=0 bash scripts/eval.sh data imagenet vit_b16_ep50 1 output/imagenet/NNIFSOD/vit_b16_ep50_16shots/nctx16_cscFalse_ctpend/seed1
 ```
 
-### 实验结果 
+### Main results 
 ![Visualization_figure](figure/res1.png)
 同先进算法的对比（w/ CLIP-B/16）
 
-### 致谢
-本代码库充分借鉴了LoCoOp的开源代码库：[LoCoOp](https://github.com/AtsuMiyai/LoCoOp)。由衷感谢该论文各位作者！
+### Acknowledgment
+This code base fully absorb the LoCoOp open source code library：[LoCoOp](https://github.com/AtsuMiyai/LoCoOp)。Heartfelt thanks to the authors of this paper!
